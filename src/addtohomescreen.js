@@ -139,7 +139,7 @@ ath.OSVersion = ath.OSVersion && ath.OSVersion[2] ? +ath.OSVersion[2].replace('_
 ath.isStandalone = window.navigator.standalone || ( ath.isMobileChrome && ( screen.height - document.documentElement.clientHeight < 40 ) );	// TODO: check the lame polyfill
 ath.isTablet = (ath.isMobileSafari && _ua.indexOf('iPad') > -1) || (ath.isMobileChrome && _ua.indexOf('Mobile') < 0);
 
-ath.isCompatible = (ath.isMobileSafari && ath.OSVersion >= 6) || ath.isMobileChrome;	// TODO: add winphone
+ath.isCompatible = (ath.isMobileSafari && ath.OSVersion >= 8) || ath.isMobileChrome;	// TODO: add winphone
 
 var _defaultSession = {
 	lastDisplayTime: 0,			// last time we displayed the message
@@ -174,7 +174,7 @@ ath.Class = function (options) {
 	if ( this.options.debug ) {
 		ath.isCompatible = true;
 		ath.OS = typeof this.options.debug == 'string' ? this.options.debug : ath.OS == 'unsupported' ? 'android' : ath.OS;
-		ath.OSVersion = ath.OS == 'ios' ? '7' : '4';
+		ath.OSVersion = ath.OS == 'ios' ? '8' : '4';
 	}
 
 	// the element the message will be appended to
@@ -189,12 +189,14 @@ ath.Class = function (options) {
 		_removeToken();
 	}
 
+	this.session = this.session || _defaultSession;
+
 	// the device is not supported
 	if ( !ath.isCompatible ) {
 		return;
 	}
 
-	this.session = this.session || _defaultSession;
+//	this.session = this.session || _defaultSession;
 
 	// check if we can use the local storage
 	try {
@@ -401,7 +403,6 @@ ath.Class.prototype = {
 		this.element.style.cssText = '-webkit-transition-property:-webkit-transform,opacity;-webkit-transition-duration:0;-webkit-transform:translate3d(0,0,0);transition-property:transform,opacity;transition-duration:0;transform:translate3d(0,0,0);-webkit-transition-timing-function:ease-out';
 		this.element.style.webkitTransform = 'translate3d(0,-' + window.innerHeight + 'px,0)';
 		this.element.style.webkitTransitionDuration = '0s';
-
 		// add the application icon
 		if ( this.options.icon && this.applicationIcon ) {
 			this.element.className += ' ath-icon';
